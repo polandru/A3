@@ -103,7 +103,7 @@ make CROSS_COMPILE=${CROSS_COMPILE}
 # on the target rootfs
 
 cp --parents writer conf/username.txt finder.sh finder-test.sh autorun-qemu.sh ${OUTDIR}/rootfs/home/
-
+  
 # TODO: Chown the root directory
 cd "$OUTDIR/rootfs"
 sudo chown -R root:root *
