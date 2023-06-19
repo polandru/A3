@@ -2,17 +2,13 @@
 # Tester script for assignment 1 and assignment 2
 # Author: Siddhant Jajoo
 
-#clean and make files
-make clean
-make
-
 set -e
 set -u
 
 NUMFILES=10
 WRITESTR=AELD_IS_FUN
 WRITEDIR=/tmp/aeld-data
-username=$(cat conf/username.txt)
+username=""
 
 if [ $# -lt 3 ]
 then

@@ -1,8 +1,8 @@
 default:
-	${CROSS_COMPILE}gcc -Wall -o writer writer.c
+	aarch64-none-linux-gnu-gcc -Wall -o writer writer.c
 
 all:
-	${CROSS_COMPILE}gcc -Wall -o writer writer.c
+	aarch64-none-linux-gnu-gcc -Wall -o writer writer.c
 
 clean:
 	rm -f writer *.o
