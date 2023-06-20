@@ -8,14 +8,14 @@ set -u
 NUMFILES=10
 WRITESTR=AELD_IS_FUN
 WRITEDIR=/tmp/aeld-data
-username=""
+username=$(cat conf/username.txt)
 
 if [ $# -lt 3 ]
 then
-	echo "Using default value ${WRITESTR} for string to write"
+	echo "Using default value ${WRITESTR} for string to write" >> assignment-4-result.txt
 	if [ $# -lt 1 ]
 	then
-		echo "Using default value ${NUMFILES} for number of files to write"
+		echo "Using default value ${NUMFILES} for number of files to write" >> assignment-4-result.txt
 	else
 		NUMFILES=$1
 	fi	
@@ -27,7 +27,7 @@ fi
 
 MATCHSTR="The number of files are ${NUMFILES} and the number of matching lines are ${NUMFILES}"
 
-echo "Writing ${NUMFILES} files containing string ${WRITESTR} to ${WRITEDIR}"
+echo "Writing ${NUMFILES} files containing string ${WRITESTR} to ${WRITEDIR}" >> assignment-4-result.txt
 
 rm -rf "${WRITEDIR}"
 
@@ -43,7 +43,7 @@ then
 	#This issue can also be resolved by using double square brackets i.e [[ ]] instead of using quotes.
 	if [ -d "$WRITEDIR" ]
 	then
-		echo "$WRITEDIR created"
+		echo "$WRITEDIR created" >> assignment-4-result.txt
 	else
 		exit 1
 	fi
@@ -65,7 +65,7 @@ rm -rf /tmp/aeld-data
 set +e
 echo ${OUTPUTSTRING} | grep "${MATCHSTR}" >> /tmp/assignment4-result.txt
 if [ $? -eq 0 ]; then
-	echo "success" >> /tmp/assignment4-result.txt
+	echo "success" >> /tmp/assignment4-result.txt >> assignment-4-result.txt
 	exit 0
 else
 	echo "failed: expected  ${MATCHSTR} in ${OUTPUTSTRING} but instead found"
