@@ -91,8 +91,6 @@ int main(int c, char **argv)
 		perror("Can't create socket");
 		exit(-1);
 	}
-	else
-		printf("Socket successfully created..\n");
 	bzero(&servaddr, sizeof(servaddr));
 
 	// assign IP, PORT

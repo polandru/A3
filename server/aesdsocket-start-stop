@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $1 == start ]
+then
+    start-stop-daemon -S --exec `pwd`/aesdsocket -- -d
+fi
+
+if [ $1 == stop]
+then 
+    start-stop-daemon -K `pwd`/aesdsocket
+fi
