@@ -53,6 +53,7 @@ void handle_connection(int connfd)
 		{
 			strcat(buff, tmp_buff);
 			buff = realloc(buff, ++read_count * BUFFSIZE + 1);
+			syslog(LOG_ALERT, "REALLOC SIZE: %d",read_count * BUFFSIZE + 1 );
 		}
 
 		if (msg_len == 0)
