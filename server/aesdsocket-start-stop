@@ -2,10 +2,10 @@
 
 if [ "$1" == "start" ]
 then
-    start-stop-daemon -S --exec `pwd`/aesdsocket -- -d
+    start-stop-daemon -S --exec /usr/bin/aesdsocket -- -d
 fi
 
 if [ "$1" == "stop" ]
 then 
-    start-stop-daemon -K `pwd`/aesdsocket
+    start-stop-daemon -K /usr/bin/aesdsocket
 fi
