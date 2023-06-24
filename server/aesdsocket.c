@@ -51,8 +51,15 @@ void handle_connection(int connfd)
 		int read_count = 1;
 		while ((msg_len = read(connfd, tmp_buff, BUFFSIZE)) >= BUFFSIZE)
 		{
+			
 			strcat(buff, tmp_buff);
-			buff = realloc(buff, ++read_count * BUFFSIZE + 1);
+			char * t;
+			t = realloc(buff, ++read_count * BUFFSIZE + 1);
+			if(t){
+				buff = t;
+			}else{
+				syslog(LOG_ALERT, "REALLOC ERROR" );
+			}
 			syslog(LOG_ALERT, "REALLOC SIZE: %d",read_count * BUFFSIZE + 1 );
 		}
 
