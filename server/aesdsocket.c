@@ -10,7 +10,7 @@
 #include <fcntl.h>
 #include <syslog.h>
 #include <arpa/inet.h>
-#define BUFFSIZE 1000
+#define BUFFSIZE 25000
 
 int sockfd, connfd;
 void handle_signals(int sgno)
