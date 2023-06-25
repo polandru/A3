@@ -2,7 +2,6 @@ default:
 	${CROSS_COMPILE}gcc -Wall -o writer writer.c
 
 all:
-	${CROSS_COMPILE}gcc -Wall -o writer writer.c
-
+	@echo Done
 clean:
 	rm -f writer *.o
