@@ -1,6 +1,6 @@
 default:
 	${CROSS_COMPILE}gcc -Wall -o aesdsocket aesdsocket.c
 all:
-	@echo "Done"
+	${CROSS_COMPILE}gcc -Wall -o aesdsocket aesdsocket.c
 clean:
 	rm -rf aesdsocket
