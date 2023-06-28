@@ -36,7 +36,6 @@ void handle_signals(int sgno)
 {
 
 	close(sockfd);
-	pthread_cancel(timestamp_thread);
 	chdir("/var/tmp");
 	remove("aesdsocketdata");
 	syslog(LOG_ALERT, "Caught signal exiting");
