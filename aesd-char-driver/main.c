@@ -20,7 +20,7 @@
 #include "aesdchar.h"
 int aesd_major =   0; // use dynamic major
 int aesd_minor =   0;
-
+#define BUFFSIZE 25000
 MODULE_AUTHOR("Your Name Here"); /** TODO: fill in your name **/
 MODULE_LICENSE("Dual BSD/GPL");
 
@@ -32,6 +32,12 @@ int aesd_open(struct inode *inode, struct file *filp)
     /**
      * TODO: handle open
      */
+    //from scull
+    // struct scull_dev *dev; /* device information */
+	// dev = container_of(inode->i_cdev, struct scull_dev, cdev);
+	// filp->private_data = dev; /* for other methods */
+
+    aesd_device = *container_of(inode->i_cdev, struct aesd_dev,cdev);
     return 0;
 }
 
@@ -52,6 +58,16 @@ ssize_t aesd_read(struct file *filp, char __user *buf, size_t count,
     /**
      * TODO: handle read
      */
+
+    if(mutex_lock_interruptible(&aesd_device.lock)){
+       int len = strlen(aesd_device.buffer[aesd_device.r_pos]);
+       if(len  > 0 && strlen(aesd_device.buffer[aesd_device.r_pos])>0){
+        retval = len;
+        copy_to_user(buf,aesd_device.buffer[aesd_device.r_pos],len);
+        aesd_device.r_pos = (aesd_device.r_pos+1)%10;
+       }
+    }
+    mutex_unlock(&aesd_device.lock);
     return retval;
 }
 
@@ -63,6 +79,23 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
     /**
      * TODO: handle write
      */
+    if(mutex_lock_interruptible(&aesd_device.lock)){
+        char * tmp =  kmalloc(count, GFP_KERNEL);
+        copy_from_user(tmp,buf,count);
+        if(count > 0){
+            strcat(aesd_device.temp, tmp);
+
+            if(tmp[count -1 ] == '\n'){
+                aesd_device.buffer[aesd_device.w_pos] = aesd_device.temp;
+                memset(aesd_device.temp,0,BUFFSIZE);
+
+            }
+               
+            
+        }
+        kfree(tmp);
+    }
+    
     return retval;
 }
 struct file_operations aesd_fops = {
@@ -106,7 +139,18 @@ int aesd_init_module(void)
      * TODO: initialize the AESD specific portion of the device
      */
 
-    result = aesd_setup_cdev(&aesd_device);
+    aesd_device.r_pos=0;
+    aesd_device.w_pos=0;
+    for(int i =0; i < 10; i++){
+        aesd_device.buffer[i] = kmalloc(BUFFSIZE,GFP_KERNEL);
+        memset(aesd_device.buffer[i],0,BUFFSIZE);
+    }
+    mutex_init(&aesd_device.lock);
+    aesd_device.temp = kmalloc(BUFFSIZE,GFP_KERNEL);
+    memset(aesd_device.temp,0,BUFFSIZE);
+
+
+    result = aesd_setup_cdev(&aesd_device); 
 
     if( result ) {
         unregister_chrdev_region(dev, 1);
