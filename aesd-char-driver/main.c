@@ -79,22 +79,22 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
     /**
      * TODO: handle write
      */
-    if(mutex_lock_interruptible(&aesd_device.lock)){
+    // if(mutex_lock_interruptible(&aesd_device.lock)){
         char * tmp =  kmalloc(count, GFP_KERNEL);
         copy_from_user(tmp,buf,count);
         if(count > 0){
             strcat(aesd_device.temp, tmp);
 
             if(tmp[count -1 ] == '\n'){
-                aesd_device.buffer[aesd_device.w_pos] = aesd_device.temp;
+                strcpy(aesd_device.buffer[aesd_device.w_pos], aesd_device.temp);
                 memset(aesd_device.temp,0,BUFFSIZE);
-
+                retval = count;
             }
                
             
         }
         kfree(tmp);
-    }
+    // }
     
     return retval;
 }
